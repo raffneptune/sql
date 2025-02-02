@@ -69,49 +69,329 @@
     INSERT INTO Siswa (nama) VALUES ('Ali'), ('Budi'), ('Citra'), ('Dewi'), ('Eka');    
 </code></pre>
 
-<h2>2. </h2>
+<h2>2. Barbershop</h2>
 <pre><code class="code-block">
+-- Membuat tabel pelanggan
+CREATE TABLE pelanggan (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nama VARCHAR(255) NOT NULL
+);
 
+-- Membuat tabel antrian
+CREATE TABLE antrian (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    pelanggan_id INT NOT NULL,
+    waktu_berangkat TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (pelanggan_id) REFERENCES pelanggan(id)
+);
+
+-- Membuat tabel status barbershop
+CREATE TABLE status_barbershop (
+    id INT PRIMARY KEY,
+    buka BOOLEAN NOT NULL
+);
+
+-- Menambahkan status awal barbershop (buka)
+INSERT INTO status_barbershop (id, buka) VALUES (1, TRUE);
+
+-- Menambahkan beberapa pelanggan sebagai contoh
+INSERT INTO pelanggan (nama) VALUES ('John Doe');
+INSERT INTO pelanggan (nama) VALUES ('Jane Smith');
+INSERT INTO pelanggan (nama) VALUES ('Alice Brown');
+INSERT INTO pelanggan (nama) VALUES ('Bob Johnson');
+
+-- Menambahkan pelanggan ke dalam antrian
+INSERT INTO antrian (pelanggan_id) VALUES (1);
+INSERT INTO antrian (pelanggan_id) VALUES (2);
+INSERT INTO antrian (pelanggan_id) VALUES (3);
+INSERT INTO antrian (pelanggan_id) VALUES (4);
 </code></pre>
 
-<h2>3. </h2>
+<h2>3. Bioskop</h2>
 <pre><code class="code-block">
+-- Membuat tabel film untuk menyimpan daftar film yang tersedia
+CREATE TABLE film (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nama VARCHAR(255) NOT NULL,
+    harga INT NOT NULL
+);
 
+-- Menambahkan data film yang tersedia
+INSERT INTO film (nama, harga) VALUES 
+('Film A', 50000),
+('Film B', 60000),
+('Film C', 70000),
+('Film D', 55000);
+
+-- Membuat tabel pembelian_tiket untuk mencatat transaksi pembelian tiket
+CREATE TABLE pembelian_tiket (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    tanggal TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Membuat tabel detail_pembelian_tiket untuk mencatat detail film yang dibeli dan jumlah tiket
+CREATE TABLE detail_pembelian_tiket (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    pembelian_tiket_id INT,
+    film_id INT,
+    jumlah_tiket INT,
+    total_harga INT,
+    FOREIGN KEY (pembelian_tiket_id) REFERENCES pembelian_tiket(id),
+    FOREIGN KEY (film_id) REFERENCES film(id)
+);
 </code></pre>
 
-<h2>4. </h2>
+<h2>4. Dealer Kartu (Black Jack Simplified)</h2>
 <pre><code class="code-block">
+CREATE DATABASE card_game;
+USE card_game;
 
+-- Tabel untuk menyimpan informasi pemain
+CREATE TABLE players (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Tabel untuk menyimpan informasi permainan
+CREATE TABLE games (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    player_id INT,
+    dealer_hand VARCHAR(255),
+    player_hand VARCHAR(255),
+    result ENUM('win', 'lose', 'draw') NOT NULL,
+    played_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (player_id) REFERENCES players(id) ON DELETE CASCADE
+);
+
+-- Tabel untuk menyimpan deck kartu
+CREATE TABLE deck (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    card_value VARCHAR(5) NOT NULL
+);
+
+-- Memasukkan daftar kartu ke dalam deck
+INSERT INTO deck (card_value) VALUES
+('2'), ('3'), ('4'), ('5'), ('6'), ('7'), ('8'), ('9'), ('10'), ('J'), ('Q'), ('K'), ('A');
 </code></pre>
 
-<h2>5. </h2>
+<h2>5. Diler Kendaraan</h2>
 <pre><code class="code-block">
+CREATE DATABASE vehicle_dealer;
+USE vehicle_dealer;
 
+-- Tabel untuk menyimpan informasi kendaraan
+CREATE TABLE vehicles (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    model VARCHAR(100) NOT NULL,
+    price INT NOT NULL,
+    stock INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Tabel untuk menyimpan transaksi pembelian
+CREATE TABLE purchases (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    vehicle_id INT,
+    quantity INT NOT NULL,
+    total_price INT NOT NULL,
+    purchased_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (vehicle_id) REFERENCES vehicles(id) ON DELETE CASCADE
+);
+
+-- Menambahkan beberapa kendaraan ke dalam tabel
+INSERT INTO vehicles (model, price, stock) VALUES
+('Mobil Sedan', 300000000, 10),
+('Motor Sport', 100000000, 5),
+('Mobil SUV', 500000000, 3);
 </code></pre>
 
-<h2>6. </h2>
+<h2>6. Gaji</h2>
 <pre><code class="code-block">
+CREATE DATABASE payroll_system;
+USE payroll_system;
 
+-- Tabel untuk menyimpan data karyawan
+CREATE TABLE employees (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    position VARCHAR(100),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Tabel untuk menyimpan data gaji
+CREATE TABLE salaries (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    employee_id INT,
+    basic_salary DOUBLE NOT NULL,
+    allowance DOUBLE NOT NULL,
+    deduction DOUBLE NOT NULL,
+    total_salary DOUBLE NOT NULL,
+    paid_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (employee_id) REFERENCES employees(id) ON DELETE CASCADE
+);
+
+-- Contoh data karyawan
+INSERT INTO employees (name, position) VALUES
+('Budi Santoso', 'Manager'),
+('Ani Wijaya', 'Staff'),
+('Joko Susilo', 'Supervisor');
+
+-- Contoh data gaji
+INSERT INTO salaries (employee_id, basic_salary, allowance, deduction, total_salary) VALUES
+(1, 5000000, 1000000, 500000, 5500000),
+(2, 3000000, 500000, 200000, 3300000),
+(3, 4000000, 700000, 300000, 4400000);
 </code></pre>
 
-<h2>7. </h2>
+<h2>7. Kafe</h2>
 <pre><code class="code-block">
+CREATE DATABASE cafe_system;
+USE cafe_system;
 
+-- Tabel untuk menyimpan menu kafe
+CREATE TABLE menu (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    item_name VARCHAR(100) NOT NULL,
+    price INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Tabel untuk menyimpan pesanan pelanggan
+CREATE TABLE orders (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Tabel untuk menyimpan detail pesanan
+CREATE TABLE order_details (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT,
+    menu_id INT,
+    quantity INT NOT NULL,
+    total_price INT NOT NULL,
+    FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
+    FOREIGN KEY (menu_id) REFERENCES menu(id) ON DELETE CASCADE
+);
+
+-- Contoh data menu
+INSERT INTO menu (item_name, price) VALUES
+('Kopi', 15000),
+('Teh', 10000),
+('Espresso', 20000),
+('Cappuccino', 25000),
+('Kue', 12000);
 </code></pre>
 
-<h2>8. </h2>
+<h2>8. Kalkulator</h2>
 <pre><code class="code-block">
+CREATE DATABASE kasir_system;
+USE kasir_system;
 
+-- Tabel untuk menyimpan daftar barang
+CREATE TABLE barang (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nama VARCHAR(100) NOT NULL,
+    harga DOUBLE NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Tabel untuk menyimpan transaksi
+CREATE TABLE transaksi (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    tanggal TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    total_harga DOUBLE NOT NULL,
+    uang_dibayar DOUBLE NOT NULL,
+    kembalian DOUBLE NOT NULL
+);
+
+-- Tabel untuk menyimpan detail transaksi
+CREATE TABLE detail_transaksi (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    transaksi_id INT,
+    barang_id INT,
+    jumlah INT NOT NULL,
+    total DOUBLE NOT NULL,
+    FOREIGN KEY (transaksi_id) REFERENCES transaksi(id) ON DELETE CASCADE,
+    FOREIGN KEY (barang_id) REFERENCES barang(id) ON DELETE CASCADE
+);
+
+-- Contoh data barang
+INSERT INTO barang (nama, harga) VALUES
+('Beras', 50000),
+('Gula', 15000),
+('Minyak Goreng', 30000),
+('Susu', 20000),
+('Roti', 10000);
 </code></pre>
 
-<h2>9. </h2>
+<h2>9. Kasir</h2>
 <pre><code class="code-block">
+-- Membuat database
+CREATE DATABASE kasir_db;
 
+-- Menggunakan database
+USE kasir_db;
+
+-- Tabel untuk menyimpan daftar barang yang ditambahkan selama transaksi
+CREATE TABLE daftar_barang (
+    id_barang INT AUTO_INCREMENT PRIMARY KEY,
+    nama_barang VARCHAR(100) NOT NULL,
+    harga DECIMAL(10, 2) NOT NULL,
+    jumlah INT NOT NULL,
+    total DECIMAL(10, 2) NOT NULL
+);
+
+-- Tabel untuk mencatat rincian pembayaran
+CREATE TABLE pembayaran (
+    id_pembayaran INT AUTO_INCREMENT PRIMARY KEY,
+    total_belanja DECIMAL(10, 2) NOT NULL,
+    uang_dibayar DECIMAL(10, 2) NOT NULL,
+    kembalian DECIMAL(10, 2) NOT NULL,
+    tanggal_transaksi DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Trigger untuk mencatat transaksi pembayaran dan membersihkan tabel daftar_barang setelah pembayaran
+DELIMITER $$
+CREATE TRIGGER after_pembayaran
+AFTER INSERT ON pembayaran
+FOR EACH ROW
+BEGIN
+    DELETE FROM daftar_barang;
+END$$
+DELIMITER ;
 </code></pre>
 
-<h2>10. </h2>
+<h2>10. Kereta</h2>
 <pre><code class="code-block">
+CREATE DATABASE sistem_kereta;
+USE sistem_kereta;
 
+-- Tabel untuk menyimpan daftar kereta
+CREATE TABLE kereta (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nama VARCHAR(100) NOT NULL,
+    tujuan VARCHAR(100) NOT NULL,
+    waktu_berangkat TIME NOT NULL,
+    kapasitas INT NOT NULL,
+    terisi INT DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Tabel untuk menyimpan pemesanan tiket
+CREATE TABLE pemesanan (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    kereta_id INT,
+    jumlah_tiket INT NOT NULL,
+    tanggal_pemesanan TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (kereta_id) REFERENCES kereta(id) ON DELETE CASCADE
+);
+
+-- Contoh data kereta
+INSERT INTO kereta (nama, tujuan, waktu_berangkat, kapasitas, terisi) VALUES
+('Ekspres Jakarta', 'Bandung', '10:00:00', 100, 0),
+('Argo Bromo', 'Surabaya', '15:00:00', 150, 0),
+('Kelas Ekonomi', 'Yogyakarta', '12:00:00', 200, 0);
 </code></pre>
 
 <h2>Mau Lebih Banyak Kode? Lihat Di Github Saya (Kode 11 - 20)</h2>
